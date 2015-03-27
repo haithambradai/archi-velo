@@ -7,8 +7,34 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 	<style type="text/css">html { height: 100% } body { height: 100%; margin: 0px; padding: 0px } #map_canvas { width: 100%; height: 100% }</style>
+	<script type="text/javascript">
+	</script>
 </head>
-<body onload="initialize()">
+<body>
+	<div id="map_canvas"></div>
+	<script type="text/javascript">
+			if(navigator.geolocation) {
+			    function hasPosition(position) {
+				    // Instanciation
+				    var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+				    marker = new google.maps.Marker({
+				    	position: point,
+				      	map: map,
+				      	// Texte du point
+				      	title: "Vous êtes ici"
+				    });
+			    }
+			    navigator.geolocation.getCurrentPosition(hasPosition);
+			}
+			var myMapOptions = {
+				zoom: 18,
+				center: point,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				map: map
+			};    
+			var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
+		
+	</script>
 	<div class="container">
 		<h1>Archi-Vélo</h1>
 		<div class="row"><?php 
@@ -55,18 +81,10 @@
 							//Affichage des données
 							echo '<tr><td class="col-md-3"><b>'.ucwords($nom_encode).' :</b><br>'.ucwords($adresse_good).'</td><td class="col-md-3">'.$lat.'<br/>'.$lng.'</td><td class="col-md-3">'.$nbVelos.'</td><td class="col-md-3">'.$nbPlaceLibre.'</td></tr>';
 							
-							//echo '<script type="text/javascript">alert("putain ça marche!");</script>';
 							echo '<script type="text/javascript">
-								var lat = '.$lat.';
-								var lng = '.$lng.';
-
-								var myMarker = new google.maps.Marker({
-									position: {lat: lat, lng: lng},
-									title:'.$nom_encode.',
-									map: map
-								});
-								myMarker.setMap(map);
-
+									var myMarker = new google.maps.Marker({position: {lat: '.$lat.', lng: '.$lng.'},title:"'.$nom_encode.'", map:map});
+									myMarker.setMap(map); 
+									google.maps.event.trigger(map, \'resize\');
 								</script>';
 						}
 					?>
@@ -74,15 +92,5 @@
 			</div>
 		</div>
 	</div>
-	<div id="map_canvas"></div>
-	<script type="text/javascript">
-		var myMapOptions = {
-			zoom: 16,
-			center: ({lat: 45.757319, lng: 4.815064}),
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			map: map
-		};
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
-	</script>
 	</body>
 </html>
