@@ -13,27 +13,26 @@
 <body>
 	<div id="map_canvas"></div>
 	<script type="text/javascript">
-			if(navigator.geolocation) {
-			    function hasPosition(position) {
-				    // Instanciation
-				    var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-				    marker = new google.maps.Marker({
-				    	position: point,
-				      	map: map,
-				      	// Texte du point
-				      	title: "Vous êtes ici"
-				    });
-			    }
-			    navigator.geolocation.getCurrentPosition(hasPosition);
-			}
-			var myMapOptions = {
-				zoom: 18,
-				center: point,
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				map: map
-			};    
-			var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
-		
+		if(navigator.geolocation) {
+		    function hasPosition(position) {
+			    // Instanciation
+			    var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+			    marker = new google.maps.Marker({
+			    	position: point,
+			      	map: map,
+			      	// Texte du point
+			      	title: "Vous êtes ici"
+			    });
+		    }
+		    navigator.geolocation.getCurrentPosition(hasPosition);
+		}
+		var myMapOptions = {
+			zoom: 18,
+			center: point,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			map: map
+		};    
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 	</script>
 	<div class="container">
 		<h1>Archi-Vélo</h1>
