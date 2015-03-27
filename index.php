@@ -13,7 +13,7 @@
 <body>
 	<div id="map_canvas"></div>
 	<script type="text/javascript">
-		if(navigator.geolocation) {
+		/*if(navigator.geolocation) {
 		    function hasPosition(position) {
 			    // Instanciation
 			    var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -25,10 +25,10 @@
 			    });
 		    }
 		    navigator.geolocation.getCurrentPosition(hasPosition);
-		}
+		}*/
 		var myMapOptions = {
 			zoom: 18,
-			center: point,
+			center: ({lat :45.757319, lng :4.815064}),
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			map: map
 		};    
