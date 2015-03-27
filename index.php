@@ -52,21 +52,22 @@
 							$adresse_encode = str_replace("n°", "Numéro ", $address);
 							$adresse_good = str_replace("°", "ème", $adresse_encode);
 
-
-
 							//Affichage des données
 							echo '<tr><td class="col-md-3"><b>'.ucwords($nom_encode).' :</b><br>'.ucwords($adresse_good).'</td><td class="col-md-3">'.$lat.'<br/>'.$lng.'</td><td class="col-md-3">'.$nbVelos.'</td><td class="col-md-3">'.$nbPlaceLibre.'</td></tr>';
-							?>
-							<script type="text/javascript">
-									var myLatlng = new google.maps.LatLng('<?php echo $lat ?>','<?php echo $lng ?>');
-									// Création du Marker
-									var myMarker = new google.maps.Marker({
-										// Coordonnées du cinéma
-										position: myLatlng,
-										map: myMap
-									});
-							</script>
-							<?php
+							
+							//echo '<script type="text/javascript">alert("putain ça marche!");</script>';
+							echo '<script type="text/javascript">
+								var lat = '.$lat.';
+								var lng = '.$lng.';
+
+								var myMarker = new google.maps.Marker({
+									position: {lat: lat, lng: lng},
+									title:'.$nom_encode.',
+									map: map
+								});
+								myMarker.setMap(map);
+
+								</script>';
 						}
 					?>
 				</table>
@@ -75,50 +76,13 @@
 	</div>
 	<div id="map_canvas"></div>
 	<script type="text/javascript">
-		function initialize() {
-		  /*map = new google.maps.Map(document.getElementById("map_canvas"), {
-		        zoom: 19,
-		        center: new google.maps.LatLng(48.858565, 2.347198),
-		        mapTypeId: google.maps.MapTypeId.ROADMAP
-		      });  */ 
-			
-			 
-			// Carte centrée sur le cinéma, zoom 16
-			var myMapOptions = {
-				zoom: 16,
-				center: myLatlng,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			 
-			// Création de la carte
-			var myMap = new google.maps.Map(
-				document.getElementById('map_canvas'),
-				myMapOptions
-			);
-		} 
-		
-		/*if (navigator.geolocation)
-		  var watchId = navigator.geolocation.watchPosition(successCallback,
-		                            null,
-		                            {enableHighAccuracy:true});
-		else
-		  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");    
-		 
-		function successCallback(position){
-		  map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-		  var marker = new google.maps.Marker({
-		    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
-		    map: map
-		  }); 
-		}
-		var myLatlng = new google.maps.LatLng(45.758796,4.834607);
-		// Création du Marker
-		var myMarker = new google.maps.Marker({
-			// Coordonnées du cinéma
-			position: myLatlng,
+		var myMapOptions = {
+			zoom: 16,
+			center: ({lat: 45.757319, lng: 4.815064}),
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			map: map
-		});*/
-
+		};
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 	</script>
-</body>
+	</body>
 </html>
