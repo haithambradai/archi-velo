@@ -6,36 +6,32 @@
 	<meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-	<style type="text/css">html { height: 100% } body { height: 100%; margin: 0px; padding: 0px } #map_canvas { width: 100%; height: 100% }</style>
+	<style type="text/css">html { height: 100% } body { height: 100%; margin: 0px; padding: 0px } #map_canvas { width: 70%; height: 70%; margin: auto; margin-bottom: 80px; border-radius: 40px}</style>
 	<script type="text/javascript">
 	</script>
 </head>
 <body>
+	<h1 style="text-align:center; font-size:72px">Archi-Vélo</h1>
 	<div id="map_canvas"></div>
 	<script type="text/javascript">
-		/*if(navigator.geolocation) {
-		    function hasPosition(position) {
-			    // Instanciation
-			    var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-			    marker = new google.maps.Marker({
-			    	position: point,
-			      	map: map,
-			      	// Texte du point
-			      	title: "Vous êtes ici"
-			    });
-		    }
-		    navigator.geolocation.getCurrentPosition(hasPosition);
-		}*/
-		var myMapOptions = {
-			zoom: 18,
-			center: ({lat :45.757319, lng :4.815064}),
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			map: map
-		};    
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
+		map = new google.maps.Map(document.getElementById("map_canvas"), {  
+		        zoom: 17,
+		        center: new google.maps.LatLng(48.858565, 2.347198),
+		        mapTypeId: google.maps.MapTypeId.ROADMAP
+		      });   
+		var watchId = navigator.geolocation.watchPosition(successCallback,null,{enableHighAccuracy:true});  
+		function successCallback(position){
+		  map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+		  var contentMoi = '<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">Vous êtes ici !</h1></div>';
+		  var infowindow = new google.maps.InfoWindow({content: contentMoi});
+		  var marker = new google.maps.Marker({
+		    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
+		    map: map
+		  }); 
+		  google.maps.event.addListener( marker, 'click', function() {infowindow.open(map, marker);});
+		}
 	</script>
 	<div class="container">
-		<h1>Archi-Vélo</h1>
 		<div class="row"><?php 
 			//Récupération du fichier JSON
 			$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c'); 
@@ -52,7 +48,7 @@
 			<!-- Tableau présentant les données -->
 			<div class="table-responsive">
 				<table class="table table-bordered">
-					<tr><th class="col-md-3">Nom</th><th class="col-md-3">Map Google</th><th class="col-md-3">Nombre de places libres</th><th class="col-md-3">Nombre de vélos disponibles</th></tr>
+					<!--<tr><th class="col-md-3">Nom</th><th class="col-md-3">Map Google</th><th class="col-md-3">Nombre de places libres</th><th class="col-md-3">Nombre de vélos disponibles</th></tr>-->
 					<?php
 						//Boucle permettant de parcourir le tableau et de récupérer les bonnes valeurs du JSON
 						for($i=0;$i<$nbLigne;$i++){
@@ -78,11 +74,18 @@
 							$adresse_good = str_replace("°", "ème", $adresse_encode);
 
 							//Affichage des données
-							echo '<tr><td class="col-md-3"><b>'.ucwords($nom_encode).' :</b><br>'.ucwords($adresse_good).'</td><td class="col-md-3">'.$lat.'<br/>'.$lng.'</td><td class="col-md-3">'.$nbVelos.'</td><td class="col-md-3">'.$nbPlaceLibre.'</td></tr>';
+							//echo '<tr><td class="col-md-3"><b>'.ucwords($nom_encode).'</b></td><td class="col-md-3">'.$lat.'<br/>'.$lng.'</td><td class="col-md-3">'.$nbVelos.'</td><td class="col-md-3">'.$nbPlaceLibre.'</td></tr>';
 							
 							echo '<script type="text/javascript">
-									var myMarker = new google.maps.Marker({position: {lat: '.$lat.', lng: '.$lng.'},title:"'.$nom_encode.'", map:map});
-									myMarker.setMap(map); 
+									var contentString'.$i.' = \'<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">'.addslashes($nom_encode).'</h1><div id="bodyContent"><p>Nombre de place disponibles : '.$nbPlaceLibre.'</p><p>Nombre de vélos disponibles : '.$nbVelos.'</p></div></div>\';
+									var myMarker'.$i.' = new google.maps.Marker({position: {lat: '.$lat.', lng: '.$lng.'},title:"'.$nom_encode.'", icon: "http://www.geovelo.fr/static/img/pictos/velov.png", map:map});
+									myMarker'.$i.'.setMap(map); 
+									google.maps.event.addListener( myMarker'.$i.', \'click\', function() {
+										var infowindow'.$i.' = new google.maps.InfoWindow({
+										    content: contentString'.$i.'
+										});
+										infowindow'.$i.'.open(map, myMarker'.$i.');
+									});
 									google.maps.event.trigger(map, \'resize\');
 								</script>';
 						}
