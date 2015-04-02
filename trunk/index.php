@@ -19,8 +19,8 @@
 	    <a href="index.php?ville=Marseille"><button type="button" class="btn btn-info" style="margin-right:35px; width: 150px;">Marseille</button></a>
 	    <a href="index.php?ville=Toulouse"><button type="button" class="btn btn-warning" style="width: 150px;">Toulouse</button></a>		
 	</div>
-	<div class="container">
-		<div><h4 style="float:left">Légende : </h4><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/yes_velo.png">Vélos et places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/no_velo.png">Plus de vélos disponibles</p><p style="padding-top: 7px; float:left;  margin-right:10px"><img src="images/place_indispo.png">Plus de places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/warn_velo.png">Peu de vélos disponibles</p><p style="padding-top: 7px; float:left;"><img src="images/warn_place.png">Peu de places disponibles</p></div>
+	<div class="container" style="width: 1225px;">
+		<div><h4 style="float:left">Légende : </h4><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/yes_velo.png">Vélos et places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/no_velo.png">Plus de vélos disponibles</p><p style="padding-top: 7px; float:left;  margin-right:10px"><img src="images/place_indispo.png">Plus de places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/warn_velo.png">Peu de vélos disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/warn_place.png">Peu de places disponibles</p><p style="float:left;"><img src="images/marker.png">Votre localisation</p></div>
 	</div>
 	<div id="map_canvas"></div>
 	<script type="text/javascript">
@@ -34,9 +34,6 @@
 		  map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 		  var contentMoi = '<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">Vous êtes ici !</h1></div>';
 		  var infowindow = new google.maps.InfoWindow({content: contentMoi});
-		  if (marker) {
-		  		marker = google.maps.Marker({position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude)});
-		  }
 		  var marker = new google.maps.Marker({
 		    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
 		    map: map
@@ -117,11 +114,9 @@
 									}
 									var contentString'.$i.' = \'<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">'.addslashes($nom_encode).'</h1><div id="bodyContent"><p>Nombre de place disponibles : '.$nbPlaceLibre.'</p><p>Nombre de vélos disponibles : '.$nbVelos.'</p></div></div>\';
 									var myMarker'.$i.' = new google.maps.Marker({position: {lat: '.$lat.', lng: '.$lng.'},title:"'.$nom_encode.'", icon: image, map:map});
+									var infowindow'.$i.' = new google.maps.InfoWindow({content: contentString'.$i.'});
 									myMarker'.$i.'.setMap(map); 
 									google.maps.event.addListener( myMarker'.$i.', \'click\', function() {
-										var infowindow'.$i.' = new google.maps.InfoWindow({
-										    content: contentString'.$i.'
-										});
 										infowindow'.$i.'.open(map, myMarker'.$i.');
 									});
 									google.maps.event.trigger(map, \'resize\');
