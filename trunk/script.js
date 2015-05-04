@@ -8,8 +8,6 @@ $(document).ready(function() {
 	// Création de la carte
 	var map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
-	alert("toto");
-
 	var lat = '<?php echo $lat; ?>';
 	var lng = '<?php echo $lng; ?>';
 
