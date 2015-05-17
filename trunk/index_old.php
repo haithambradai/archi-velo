@@ -4,6 +4,8 @@
 	<title>Archi Velo</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 	<meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
+	<!-- Rafraichissement de la page -->
+	<meta http-equiv="Refresh" content="180">
 	<!-- Initialisation de la carte (dimensions,zoom)-->
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -15,56 +17,73 @@
 	<div class="container" style="margin-bottom:70px; text-align:center">
 		<h2 style="margin-bottom:35px">Dans quelle ville êtes vous ?</h2>
 		<!-- Définition des villes -->
-		<a href="index.php?ville=Lyon"><button type="button" class="btn btn-primary" style="margin-right:35px; width: 150px;">Lyon</button></a>
-	    <a href="index.php?ville=Paris"><button type="button" class="btn btn-danger" style="margin-right:35px; width: 150px;">Paris</button></a>
-	    <a href="index.php?ville=Marseille"><button type="button" class="btn btn-info" style="margin-right:35px; width: 150px;">Marseille</button></a>
-	    <a href="index.php?ville=Toulouse"><button type="button" class="btn btn-warning" style="width: 150px;">Toulouse</button></a>	
+		<a href="index_old.php?ville=Lyon"><button type="button" class="btn btn-primary" style="margin-right:35px; width: 150px;">Lyon</button></a>
+	    <a href="index_old.php?ville=Paris"><button type="button" class="btn btn-danger" style="margin-right:35px; width: 150px;">Paris</button></a>
+	    <a href="index_old.php?ville=Marseille"><button type="button" class="btn btn-info" style="margin-right:35px; width: 150px;">Marseille</button></a>
+	    <a href="index_old.php?ville=Toulouse"><button type="button" class="btn btn-warning" style="margin-right:35px; width: 150px;">Toulouse</button></a>
+	    <a href="index_old.php?ville=Besancon"><button type="button" class="btn btn-success" style="width: 150px;">Besancon</button></a>	
 	    <!-- Fin des villes -->
 	</div>
 	<div class="container" style="width: 1225px;">
 		<div><h4 style="float:left">Légende : </h4><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/yes_velo.png">Vélos et places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/no_velo.png">Plus de vélos disponibles</p><p style="padding-top: 7px; float:left;  margin-right:10px"><img src="images/place_indispo.png">Plus de places disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/warn_velo.png">Peu de vélos disponibles</p><p style="padding-top: 7px; float:left; margin-right:10px"><img src="images/warn_place.png">Peu de places disponibles</p><p style="float:left;"><img src="images/marker.png">Votre localisation</p></div>
 	</div>
 	<div id="map_canvas"></div>
-	<!-- Toutes les infos nécessaires à la map -->
-	<script type="text/javascript">
-		map = new google.maps.Map(document.getElementById("map_canvas"), {  
-		        zoom: 16,
-		        center: new google.maps.LatLng(48.858565, 2.347198),
-		        mapTypeId: google.maps.MapTypeId.ROADMAP
-		      });   
-		var watchId = navigator.geolocation.watchPosition(successCallback,null,{enableHighAccuracy:true});  
-		function successCallback(position){
-		  map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-		  var contentMoi = '<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">Vous êtes ici !</h1></div>';
-		  var infowindow = new google.maps.InfoWindow({content: contentMoi});
-		  var marker = new google.maps.Marker({
-		    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
-		    map: map
-		  }); 
-		  google.maps.event.addListener( marker, 'click', function() {infowindow.open(map, marker);});
-		}
-	</script>
-	<!-- Fin des infos -->
+	
 	<div class="container">
 		<div class="row"><?php 
 			//Récupération des fichiers JSON selon les villes
 			if (isset($_GET['ville']) && !empty($_GET['ville']) && $_GET['ville'] == 'Lyon') {
 				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c');
+				$lat = 45.7579555;
+				$long = 4.8351209;
 			}
 			else if (isset($_GET['ville']) && !empty($_GET['ville']) && $_GET['ville'] == 'Paris'){
 				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c'); 
+				$lat = 48.8588589;
+				$long = 2.3470599;
 			}
 			else if (isset($_GET['ville']) && !empty($_GET['ville']) && $_GET['ville'] == 'Marseille'){
 				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Marseille&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c'); 
+				$lat = 43.2803905;
+				$long = 5.405139;
 			}
 			else if (isset($_GET['ville']) && !empty($_GET['ville']) && $_GET['ville'] == 'Toulouse'){
 				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Toulouse&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c'); 
+				$lat = 43.6014458;
+				$long = 1.4119841;
+			}
+			else if (isset($_GET['ville']) && !empty($_GET['ville']) && $_GET['ville'] == 'Besancon'){
+				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Besancon&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c'); 
+				$lat = 47.2419653;
+				$long = 6.025658;
 			}
 			else{
 				$json = file_get_contents('https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=05011dd5abfb13c9db88e0f585644d4cac5a416c');
+				$lat = 45.7579555;
+				$long = 4.8351209;
 			}
-			
-			//Le var_dump est à décommenter si on veut récupérer d'autres infos dans le JSON pour voir le nom du bon champ
+			?>
+			<!-- Toutes les infos nécessaires à la map -->
+			<script type="text/javascript">
+				map = new google.maps.Map(document.getElementById("map_canvas"), {  
+				        zoom: 16,
+				        center: new google.maps.LatLng(48.858565, 2.347198),
+				        mapTypeId: google.maps.MapTypeId.ROADMAP
+				      });   
+				var watchId = navigator.geolocation.watchPosition(successCallback,null,{enableHighAccuracy:true});  
+				function successCallback(position){
+				  map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+				  var contentMoi = '<div id="content"><div id="siteNotice"><div><h1 id="firstHeading" class="firstHeading" style="font-size:24px">Vous êtes ici !</h1></div>';
+				  var infowindow = new google.maps.InfoWindow({content: contentMoi});
+				  var marker = new google.maps.Marker({
+				    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
+				    map: map
+				  }); 
+				  google.maps.event.addListener( marker, 'click', function() {infowindow.open(map, marker);});
+				}
+			</script>
+			<!-- Fin des infos -->
+			<?php //Le var_dump est à décommenter si on veut récupérer d'autres infos dans le JSON pour voir le nom du bon champ
 			//var_dump(json_decode($json));
 
 			//Transformation du JSON en tableau
