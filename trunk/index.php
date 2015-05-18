@@ -95,6 +95,7 @@
 			<!-- Tableau présentant les données -->
 			<div class="table-responsive">
 				<table class="table table-bordered">
+					<!-- A décommenter pour l'affichage de toutes les stations dans un tableau -->
 					<!--<tr><th class="col-md-3">Nom</th><th class="col-md-3">Map Google</th><th class="col-md-3">Nombre de places libres</th><th class="col-md-3">Nombre de vélos disponibles</th></tr>-->
 					<?php
 						//Boucle permettant de parcourir le tableau et de récupérer les bonnes valeurs du JSON
